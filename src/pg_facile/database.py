@@ -14,12 +14,12 @@ class Database:
         variable. (This particularly integrates well with Heroku)"""
         
         url = None
+        urlparse.uses_netloc.append("postgres")
         if connOption is None:
-            urlparse.uses_netloc.append("postgres")
             url = urlparse.urlparse(os.environ["DATABASE_URL"])
         elif type(connOption) is str:
-            url = databaseUrl
-            
+            url = urlparse.urlparse(connOption)
+        
         if url is not None:
             # Expected: postgres://[user[:password]@][netloc][:port][/dbname]
             self._conn = psycopg2.connect(
@@ -41,15 +41,19 @@ class Database:
         """Will return an array of column names. You may provide a `subkeys`
         dict to substitute some column names with other names."""
         
-        columns = list(map(lambda d: d[0], self._cur.description))
+        columns = self._cur.description
+        if columns is None:
+            return None
+        
+        columnNames = [col[0] for col in columns]
         
         # substitute columns names for new ones
         if subkeys is not None:
-            for (i, oldName) in enumerate(columns):
+            for (i, oldName) in enumerate(columnNames):
                 if oldName in subkeys:
-                    columns[i] = subkeys[oldName]
+                    columnNames[i] = subkeys[oldName]
         
-        return columns
+        return columnNames
     
     def _formatRows(self, row, columns):
         """Turns a result row into a dict with column names as keys."""
@@ -108,7 +112,7 @@ class Database:
     def executeAndFetchAll(self, sql, sqlParams=None, subkeys=None):
         """Performs an `execute` and then a `fetchAll`."""
         self.execute(sql, sqlParams)
-        return self.fetchall(subkeys)
+        return self.fetchAll(subkeys)
     
     def executeFile(self, filename):
         """Loads file contents and executes them at once."""

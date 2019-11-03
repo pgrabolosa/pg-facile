@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pg-facile", # Replace with your own username
-    version="0.0.1",
+    version="0.0.5",
     author="Pierre Grabolosa",
     author_email="pierre.grabolosa@imerir.com",
     description="An easy-to-use wrapper for psycopg2 for students.",
@@ -18,6 +18,9 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
+    ],
+    install_requires=[
+        'psycopg2-binary',
     ],
     python_requires='>=3.6',
 )

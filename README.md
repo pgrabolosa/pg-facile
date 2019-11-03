@@ -47,7 +47,7 @@ from pg-facile import Database
 url = 'postgres://postgres:123456@localhost:5432/postgres'
 
 with Database(url) as db:
-  db.execute('CREATE TABLE numbers (value INTEGER)')
+  db.execute('DROP TABLE IF EXISTS numbers; CREATE TABLE numbers (value INTEGER)')
   
   for i in range(50):
     db.execute('INSERT INTO numbers(value) VALUES (:val)', {'val': i})
