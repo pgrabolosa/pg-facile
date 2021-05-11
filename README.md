@@ -1,3 +1,5 @@
+**This repository is discontinued.**
+
 # pg-facile
 
 An easy-to-use wrapper for psycopg2 for those who only care to type a SQL statement and get its result with column names in an easy to use format (namely: students).
